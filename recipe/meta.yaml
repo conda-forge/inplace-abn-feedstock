@@ -39,6 +39,8 @@ requirements:
     - libcusolver-dev           # [build_platform != target_platform]
     - libcusparse-dev           # [build_platform != target_platform]
     {% endif %}
+    - cross-python_{{ target_platform }}  # [build_platform != target_platform]
+    - python                              # [build_platform != target_platform]
   host:
     # GPU requirements
     - cudnn                                     # [cuda_compiler_version != "None"]
