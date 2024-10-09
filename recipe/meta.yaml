@@ -16,8 +16,7 @@ source:
   sha256: 7c286ca53d35cb37b0d1f8b9beb5a910c694129d3d4f7b8e53188370bb260c27
 
 build:
-  number: 2
-  skip: true  # [win]
+  number: 3
   string: cpu_py{{ CONDA_PY }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
 
@@ -61,7 +60,7 @@ requirements:
     # other requirements
     - pip
     - python
-    - pytorch >=2.4.0
+    - pytorch >=2.4.0  # [not win]
     - setuptools
     - setuptools_scm
   run:
