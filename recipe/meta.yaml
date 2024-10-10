@@ -63,7 +63,7 @@ requirements:
     - python
     - pytorch >=2.4.0
     - setuptools
-    - setuptools_scm
+    - setuptools-scm
   run:
     - python
 
