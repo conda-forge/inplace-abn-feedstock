@@ -18,6 +18,9 @@ source:
 build:
   number: 5
   skip: true  # [win]
+  {% if cuda_major < 12 %}
+  skip: true
+  {% endif %}
   string: cpu_py{{ CONDA_PY }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
 
