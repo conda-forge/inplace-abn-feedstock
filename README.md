@@ -297,6 +297,3 @@ Feedstock Maintainers
 
 * [@jeongseok-meta](https://github.com/jeongseok-meta/)
 
-
-<!-- dummy commit to enable rerendering -->
-
