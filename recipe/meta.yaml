@@ -60,7 +60,7 @@ requirements:
     # other requirements
     - pip
     - python
-    - pytorch >=2.4.0  # [not win]
+    - pytorch >=2.4.0
     - setuptools
     - setuptools_scm
   run:
