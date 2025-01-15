@@ -17,7 +17,6 @@ source:
 
 build:
   number: 10
-  skip: true  # [win]
   {% if cuda_major < 12 %}
   skip: true  # [cuda_compiler_version != "None"]
   {% endif %}
