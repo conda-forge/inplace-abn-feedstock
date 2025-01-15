@@ -29,7 +29,7 @@ requirements:
     - {{ compiler("cuda") }}    # [cuda_compiler_version != "None"]
     - {{ stdlib("c") }}
     {% if cuda_major >= 12 %}
-    - cuda-driver-dev           # [build_platform != target_platform]
+    - cuda-driver-dev           # [build_platform != target_platform and linux]
     - cuda-cudart-dev           # [build_platform != target_platform]
     - cuda-nvrtc-dev            # [build_platform != target_platform]
     - cuda-nvtx-dev             # [build_platform != target_platform]
@@ -48,7 +48,7 @@ requirements:
     - magma                                     # [cuda_compiler_version != "None"]
     - cuda-version {{ cuda_compiler_version }}  # [cuda_compiler_version != "None"]
     {% if cuda_major >= 12 %}
-    - cuda-driver-dev
+    - cuda-driver-dev    # [linux]
     - cuda-cudart-dev
     - cuda-nvrtc-dev
     - cuda-nvtx-dev
