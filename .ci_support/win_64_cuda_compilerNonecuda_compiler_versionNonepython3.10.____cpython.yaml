@@ -14,8 +14,6 @@ cudnn:
 - '9'
 cxx_compiler:
 - vs2019
-nccl:
-- '2'
 pin_run_as_build:
   python:
     min_pin: x.x
