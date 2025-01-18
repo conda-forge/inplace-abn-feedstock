@@ -68,6 +68,7 @@ requirements:
     - setuptools-scm
   run:
     - python
+    - pytorch
 
 test:
   imports:
