@@ -41,6 +41,10 @@ requirements:
     - libcusolver-dev           # [build_platform != target_platform]
     - libcusparse-dev           # [build_platform != target_platform]
     {% endif %}
+    - pip
+    - python
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - setuptools
     - setuptools-scm
   host:
     # GPU requirements
