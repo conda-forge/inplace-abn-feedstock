@@ -41,9 +41,10 @@ requirements:
     - libcusolver-dev           # [build_platform != target_platform]
     - libcusparse-dev           # [build_platform != target_platform]
     {% endif %}
+    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - pip
     - python
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - pytorch
     - setuptools
     - setuptools-scm
   host:
@@ -68,7 +69,7 @@ requirements:
     # other requirements
     - pip
     - python
-    - pytorch >=2.4.0
+    - pytorch
     - setuptools
     - setuptools-scm
   run:
