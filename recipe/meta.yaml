@@ -16,7 +16,7 @@ source:
   sha256: 7c286ca53d35cb37b0d1f8b9beb5a910c694129d3d4f7b8e53188370bb260c27
 
 build:
-  number: 10
+  number: 11
   skip: true  # [win]
   {% if cuda_major < 12 %}
   skip: true  # [cuda_compiler_version != "None"]
@@ -27,47 +27,20 @@ build:
 requirements:
   build:
     - {{ compiler("cxx") }}
-    - {{ compiler("cuda") }}    # [cuda_compiler_version != "None"]
+    - {{ compiler("cuda") }}  # [cuda_compiler_version != "None"]
     - {{ stdlib("c") }}
-    {% if cuda_major >= 12 %}
-    - cuda-driver-dev           # [build_platform != target_platform]
-    - cuda-cudart-dev           # [build_platform != target_platform]
-    - cuda-nvrtc-dev            # [build_platform != target_platform]
-    - cuda-nvtx-dev             # [build_platform != target_platform]
-    - cuda-nvml-dev             # [build_platform != target_platform]
-    - cuda-profiler-api         # [build_platform != target_platform]
-    - libcublas-dev             # [build_platform != target_platform]
-    - libcufft-dev              # [build_platform != target_platform]
-    - libcurand-dev             # [build_platform != target_platform]
-    - libcusolver-dev           # [build_platform != target_platform]
-    - libcusparse-dev           # [build_platform != target_platform]
-    {% endif %}
+    - cuda-toolkit            # [cuda_compiler_version != "None"]
   host:
     # GPU requirements
-    - cudnn                                     # [cuda_compiler_version != "None"]
-    - nccl                                      # [cuda_compiler_version != "None"]
-    - magma                                     # [cuda_compiler_version != "None"]
     - cuda-version {{ cuda_compiler_version }}  # [cuda_compiler_version != "None"]
-    {% if cuda_major >= 12 %}
-    - cuda-driver-dev
-    - cuda-cudart-dev
-    - cuda-nvrtc-dev
-    - cuda-nvtx-dev
-    - cuda-nvml-dev
-    - cuda-profiler-api
-    - libcublas-dev
-    - libcufft-dev
-    - libcurand-dev
-    - libcusolver-dev
-    - libcusparse-dev
-    {% endif %}
-    # other requirements
+    - cuda-toolkit                              # [cuda_compiler_version != "None"]
     - pip
     - python
     - pytorch >=2.4.0
     - setuptools
     - setuptools-scm
   run:
+    - cuda-cudart  # [cuda_compiler_version != "None"]
     - python
 
 test:
