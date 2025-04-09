@@ -29,7 +29,7 @@ requirements:
     - {{ compiler("cxx") }}
     - {{ compiler("cuda") }}  # [cuda_compiler_version != "None"]
     - {{ stdlib("c") }}
-    - cuda-toolkit            # [cuda_compiler_version != "None"]
+    - cuda-toolkit            # [cuda_compiler_version != "None" and build_platform != target_platform]
   host:
     # GPU requirements
     - cuda-version {{ cuda_compiler_version }}  # [cuda_compiler_version != "None"]
