@@ -42,6 +42,7 @@ requirements:
   run:
     - cuda-cudart  # [cuda_compiler_version != "None"]
     - python
+    - pytorch
 
 test:
   imports:
