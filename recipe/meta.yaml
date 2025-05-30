@@ -16,7 +16,7 @@ source:
   sha256: 7c286ca53d35cb37b0d1f8b9beb5a910c694129d3d4f7b8e53188370bb260c27
 
 build:
-  number: 11
+  number: 12
   skip: true  # [win]
   {% if cuda_major < 12 %}
   skip: true  # [cuda_compiler_version != "None"]
@@ -42,6 +42,7 @@ requirements:
   run:
     - cuda-cudart  # [cuda_compiler_version != "None"]
     - python
+    - pytorch
 
 test:
   imports:
