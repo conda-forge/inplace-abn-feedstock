@@ -21,6 +21,7 @@ build:
   {% if cuda_major < 12 %}
   skip: true  # [cuda_compiler_version != "None"]
   {% endif %}
+  skip: true  # [py>=313 and cuda_compiler_version == "13.0"]
   string: cpu_py{{ CONDA_PY }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version == "None"]
   string: cuda{{ cuda_compiler_version | replace('.', '') }}_py{{ CONDA_PY }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}  # [cuda_compiler_version != "None"]
 
