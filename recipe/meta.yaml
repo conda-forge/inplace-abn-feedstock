@@ -50,6 +50,9 @@ test:
     - inplace_abn
   commands:
     - pip check
+    - python run_test.py
+  files:
+    - run_test.py
   requires:
     - pip
     - setuptools
