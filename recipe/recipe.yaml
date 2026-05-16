@@ -38,14 +38,20 @@ requirements:
       then: cuda-toolkit
     - pip
     - python
-    - pytorch >=2.4.0
+    - if: cuda_compiler_version == "None"
+      then: pytorch >=2.4.0 *cpu*
+    - if: cuda_compiler_version != "None"
+      then: pytorch >=2.4.0 *cuda*
     - setuptools
     - setuptools-scm
   run:
     - if: cuda_compiler_version != "None"
       then: cuda-cudart
     - python
-    - pytorch
+    - if: cuda_compiler_version == "None"
+      then: pytorch *cpu*
+    - if: cuda_compiler_version != "None"
+      then: pytorch *cuda*
 
 tests:
   - python:
