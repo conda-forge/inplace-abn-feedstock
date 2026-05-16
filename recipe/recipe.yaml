@@ -18,6 +18,8 @@ build:
   skip:
     - win
     - cuda_compiler_version != "None" and cuda_compiler_version != "12.9" and cuda_compiler_version != "13.0"
+    # PyTorch CUDA builds are not available for Python 3.14 yet.
+    - match(python, ">=3.14") and cuda_compiler_version != "None"
     - match(python, ">=3.13") and cuda_compiler_version == "13.0"
   string: ${{ "cuda" ~ (cuda_compiler_version | replace(".", "")) ~ "_py" ~ (python | version_to_buildstring) ~ "_" ~ build_number if cuda_compiler_version != "None" else "cpu_py" ~ (python | version_to_buildstring) ~ "_" ~ build_number }}
   script:
