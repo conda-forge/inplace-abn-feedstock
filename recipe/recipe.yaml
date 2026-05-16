@@ -1,0 +1,81 @@
+schema_version: 1
+
+context:
+  name: inplace-abn
+  version: "1.1.0"
+  build_number: 19
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/inplace-abn-${{ version }}.tar.gz
+  sha256: 7c286ca53d35cb37b0d1f8b9beb5a910c694129d3d4f7b8e53188370bb260c27
+
+build:
+  number: ${{ build_number }}
+  skip:
+    - win
+    - cuda_compiler_version != "None" and cuda_compiler_version != "12.9" and cuda_compiler_version != "13.0"
+    # PyTorch CUDA builds are not available for Python 3.14 yet.
+    - match(python, ">=3.14") and cuda_compiler_version != "None"
+    - match(python, ">=3.13") and cuda_compiler_version == "13.0"
+  string: ${{ "cuda" ~ (cuda_compiler_version | replace(".", "")) ~ "_py" ~ (python | version_to_buildstring) ~ "_" ~ build_number if cuda_compiler_version != "None" else "cpu_py" ~ (python | version_to_buildstring) ~ "_" ~ build_number }}
+  script:
+    file: build.sh
+
+requirements:
+  build:
+    - ${{ compiler("cxx") }}
+    - ${{ stdlib("c") }}
+    - if: cuda_compiler_version != "None"
+      then: ${{ compiler("cuda") }}
+    - if: cuda_compiler_version != "None" and build_platform != target_platform
+      then: cuda-toolkit
+  host:
+    - if: cuda_compiler_version != "None"
+      then: cuda-version ==${{ cuda_compiler_version }}
+    - if: cuda_compiler_version != "None"
+      then: cuda-toolkit
+    - pip
+    - python
+    - if: cuda_compiler_version == "None"
+      then: pytorch >=2.4.0 *cpu*
+    - if: cuda_compiler_version != "None"
+      then: pytorch >=2.4.0 *cuda*
+    - setuptools
+    - setuptools-scm
+  run:
+    - if: cuda_compiler_version != "None"
+      then: cuda-cudart
+    - python
+    - if: cuda_compiler_version == "None"
+      then: pytorch *cpu*
+    - if: cuda_compiler_version != "None"
+      then: pytorch *cuda*
+
+tests:
+  - python:
+      imports:
+        - inplace_abn
+  - script:
+      - pip check
+      - python run_test.py
+    files:
+      recipe:
+        - run_test.py
+    requirements:
+      run:
+        - pip
+        - setuptools
+
+about:
+  homepage: https://github.com/mapillary/inplace_abn
+  summary: In-Place Activated BatchNorm for Memory-Optimized Training of DNNs
+  license: BSD-3-Clause
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - jeongseok-meta
