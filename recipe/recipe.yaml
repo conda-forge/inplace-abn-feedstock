@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: inplace-abn
   version: "1.1.0"
-  build_number: 19
+  build_number: 20
 
 package:
   name: ${{ name|lower }}
@@ -37,24 +37,24 @@ requirements:
         - cross-python_${{ target_platform }}
         - python
     - if: cuda_compiler_version != "None"
-      then: ${{ compiler("cuda") }}
-    - if: cuda_compiler_version != "None" and build_platform != target_platform
-      then: cuda-toolkit
+      then:
+        - ${{ compiler("cuda") }}
+        - if: build_platform != target_platform
+          then: cuda-toolkit
     - if: cuda_compiler_version == "None" and build_platform != target_platform
       then: pytorch >=2.4.0 *cpu*
     - if: cuda_compiler_version != "None" and build_platform != target_platform
       then: pytorch >=2.4.0 *cuda*
   host:
     - if: cuda_compiler_version != "None"
-      then: cuda-version ==${{ cuda_compiler_version }}
-    - if: cuda_compiler_version != "None"
-      then: cuda-toolkit
+      then:
+        - cuda-version ==${{ cuda_compiler_version }}
+        - cuda-toolkit
     - pip
     - python
     - if: cuda_compiler_version == "None"
       then: pytorch >=2.4.0 *cpu*
-    - if: cuda_compiler_version != "None"
-      then: pytorch >=2.4.0 *cuda*
+      else: pytorch >=2.4.0 *cuda*
     - setuptools
     - setuptools-scm
   run:
@@ -63,9 +63,7 @@ requirements:
     - python
     - if: cuda_compiler_version == "None"
       then: pytorch *cpu*
-    - if: cuda_compiler_version != "None"
-      then: pytorch *cuda*
-
+      else: pytorch *cuda*
 tests:
   - python:
       imports:
