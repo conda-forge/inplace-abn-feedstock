@@ -1,0 +1,34 @@
+--- a/setup.py
++++ b/setup.py
+@@ -1,3 +1,4 @@
++import os
+ from os import path, listdir
+ 
+ import setuptools
+@@ -22,6 +23,8 @@
+ with open(path.join(here, "README.md"), encoding="utf-8") as f:
+     long_description = f.read()
+ 
++optimization_args = ["/O2"] if os.name == "nt" else ["-O3"]
++
+ if torch.has_cuda:
+     ext_modules = [
+         CUDAExtension(
+@@ -28,7 +31,7 @@
+             name="inplace_abn._backend",
+             sources=find_sources("src"),
+             extra_compile_args={
+-                "cxx": ["-O3"],
++                "cxx": optimization_args,
+                 "nvcc": []
+             },
+             include_dirs=[path.join(here, "include")],
+@@ -40,7 +43,7 @@
+         CppExtension(
+             name="inplace_abn._backend",
+             sources=find_sources("src", False),
+-            extra_compile_args=["-O3"],
++            extra_compile_args=optimization_args,
+             include_dirs=[path.join(here, "include")]
+         )
+     ]
