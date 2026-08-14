@@ -55,7 +55,13 @@ requirements:
     - if: cuda_compiler_version != "None"
       then:
         - cuda-version ==${{ cuda_compiler_version }}
-        - cuda-toolkit
+        - if: win
+          then:
+            # compiler("cuda") supplies nvcc; using the full cuda-toolkit here
+            # overflows cmd.exe's input-line limit during MSVC activation.
+            - cuda-cudart-dev
+            - cuda-crt-dev_${{ target_platform }}
+          else: cuda-toolkit
     - pip
     - python
     - if: cuda_compiler_version == "None"
