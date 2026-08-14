@@ -24,9 +24,9 @@ build:
     # the aarch64 compiler, so keep linux-aarch64 CPU-only for now.
     - linux and aarch64 and cuda_compiler_version != "None"
     - cuda_compiler_version != "None" and cuda_compiler_version != "12.9" and cuda_compiler_version != "13.0"
-    # PyTorch 2.13's Windows CUDA 12 build targets CUDA 12.8, while this
-    # feedstock's compiler matrix provides 12.9. Use the aligned CUDA 13 path.
-    - win and cuda_compiler_version != "None" and cuda_compiler_version != "13.0"
+    # Upstream does not support Windows CUDA, and its CUDA source does not
+    # compile with current PyTorch/MSVC. Revisit once upstream supports it.
+    - win and cuda_compiler_version != "None"
     # PyTorch CUDA builds are not available for Python 3.14 yet.
     - match(python, ">=3.14") and cuda_compiler_version != "None"
     - match(python, ">=3.13") and cuda_compiler_version == "13.0"
@@ -55,13 +55,7 @@ requirements:
     - if: cuda_compiler_version != "None"
       then:
         - cuda-version ==${{ cuda_compiler_version }}
-        - if: win
-          then:
-            # compiler("cuda") supplies nvcc; using the full cuda-toolkit here
-            # overflows cmd.exe's input-line limit during MSVC activation.
-            - cuda-cudart-dev
-            - cuda-crt-dev_${{ target_platform }}
-          else: cuda-toolkit
+        - cuda-toolkit
     - pip
     - python
     - if: cuda_compiler_version == "None"
