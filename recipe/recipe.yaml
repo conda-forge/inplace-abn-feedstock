@@ -51,12 +51,15 @@ requirements:
     - if: cuda_compiler_version != "None"
       then:
         - cuda-version ==${{ cuda_compiler_version }}
-        - cuda-toolkit
+        # Not cuda-toolkit: its cuda-gdb needs a gdb without Python 3.13+
+        # builds, which made the solver fall back to an old PyTorch.
+        - cuda-compiler
+        - cuda-libraries-dev
     - pip
     - python
     - if: cuda_compiler_version == "None"
-      then: pytorch >=2.4.0 *cpu*
-      else: pytorch >=2.4.0 *cuda*
+      then: pytorch ${{ pytorch }}.* *cpu*
+      else: pytorch ${{ pytorch }}.* *cuda*
     - setuptools
     - setuptools-scm
   run:
