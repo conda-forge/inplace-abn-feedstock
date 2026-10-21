@@ -52,8 +52,8 @@ requirements:
       then:
         - cuda-version ==${{ cuda_compiler_version }}
         # Not cuda-toolkit: its cuda-gdb needs a gdb without Python 3.13+
-        # builds, which made the solver fall back to an old PyTorch.
-        - cuda-compiler
+        # builds, which made the solver fall back to an old PyTorch. nvcc
+        # comes from the build environment.
         - cuda-libraries-dev
     - pip
     - python
