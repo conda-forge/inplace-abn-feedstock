@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: inplace-abn
   version: "1.1.0"
-  build_number: 23
+  build_number: 24
 
 package:
   name: ${{ name|lower }}
@@ -23,13 +23,9 @@ build:
     # PyTorch's CUDA extension cross-build path injects x86 CPU flags into
     # the aarch64 compiler, so keep linux-aarch64 CPU-only for now.
     - linux and aarch64 and cuda_compiler_version != "None"
-    - cuda_compiler_version != "None" and cuda_compiler_version != "12.9" and cuda_compiler_version != "13.0"
     # Upstream does not support Windows CUDA, and its CUDA source does not
     # compile with current PyTorch/MSVC. Revisit once upstream supports it.
     - win and cuda_compiler_version != "None"
-    # PyTorch CUDA builds are not available for Python 3.14 yet.
-    - match(python, ">=3.14") and cuda_compiler_version != "None"
-    - match(python, ">=3.13") and cuda_compiler_version == "13.0"
   string: ${{ "cuda" ~ (cuda_compiler_version | replace(".", "")) ~ "_py" ~ (python | version_to_buildstring) ~ "_" ~ build_number if cuda_compiler_version != "None" else "cpu_py" ~ (python | version_to_buildstring) ~ "_" ~ build_number }}
   script:
     file: ${{ "build.bat" if win else "build.sh" }}
@@ -55,12 +51,15 @@ requirements:
     - if: cuda_compiler_version != "None"
       then:
         - cuda-version ==${{ cuda_compiler_version }}
-        - cuda-toolkit
+        # Not cuda-toolkit: its cuda-gdb needs a gdb without Python 3.13+
+        # builds, which made the solver fall back to an old PyTorch. nvcc
+        # comes from the build environment.
+        - cuda-libraries-dev
     - pip
     - python
     - if: cuda_compiler_version == "None"
-      then: pytorch >=2.4.0 *cpu*
-      else: pytorch >=2.4.0 *cuda*
+      then: pytorch ${{ pytorch }}.* *cpu*
+      else: pytorch ${{ pytorch }}.* *cuda*
     - setuptools
     - setuptools-scm
   run:
